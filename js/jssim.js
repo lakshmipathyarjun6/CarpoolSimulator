@@ -454,6 +454,10 @@ var jssim = jssim || {};
     Space2D.prototype.getLocation = function (agentId) {
         return this.locations[agentId];
     };
+
+    Space2D.prototype.getEndLocation = function (riderId) {
+        return this.endlocations[riderId];
+    };
     
     Space2D.prototype.getAgent = function (agentId) {
         return this.agents[agentId];
@@ -462,6 +466,14 @@ var jssim = jssim || {};
     Space2D.prototype.updateAgent = function (agent, x, y) {
         this.locations[agent.id] = new jss.Vector2D(x, y);
         this.agents[agent.id] = agent;
+    };
+
+    Space2D.prototype.deleteAgent = function (agent) {
+        delete this.agents[agent.id];
+        delete this.locations[agent.id];
+        if(this.endlocations[agent.id]) {
+            delete this.endlocations[agent.id];
+        }
     };
 
     Space2D.prototype.updateAgentRider = function (rider, x, y, endx, endy) {

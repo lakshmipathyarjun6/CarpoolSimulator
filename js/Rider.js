@@ -8,7 +8,9 @@ var Rider = function(id, city, startx, starty, endx, endy){
    	this.endx = endx;
 	this.endy = endy;
  	this.inTransit = false;
- 	this.carAssignment = '';
+ 	this.carAssignment = null;
+ 	this.selectedToDropOff = false;
+ 	this.priorZoneId = '';
 }
 Rider.prototype = Object.create(jssim.SimEvent.prototype);
 
@@ -18,5 +20,26 @@ Rider.prototype.update = function(deltaTime) {
 		var car_location = this.city.getLocation(this.carAssignment);
 		rider_location.x = car_location.x;
 		rider_location.y = car_location.y;
+		this.x = car_location.x;
+		this.y = car_location.y;
 	}
 };
+
+Rider.prototype.designateAsDroppingOffNext = function() {
+	this.selectedToDropOff = true;
+}
+
+Rider.prototype.hopOffAtTransferPoint = function(tp, priorZoneId) {
+	var rider_location = this.city.getLocation(this.id);
+	rider_location.x = tp.x;
+	rider_location.y = tp.y;
+	this.x = tp.x;
+	this.y = tp.y;
+	this.carAssignment = null;
+	this.priorZoneId = priorZoneId;
+	tp.receiveInboundRider(this);
+}
+
+Rider.prototype.destroy = function() {
+	delete this.city.deleteAgent(this);
+}
