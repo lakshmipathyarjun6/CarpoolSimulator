@@ -23,8 +23,5 @@ TransferPoint.prototype.getRidersAtTransferPoint = function() {
 }
 
 TransferPoint.prototype.loseOutboundRider = function(rider) {
-	var index = this.ridersAtTp.indexOf(rider.id);
-	if (index > -1) {
-  		this.ridersAtTp.splice(index, 1);
-	}
+	delete this.ridersAtTp[rider.id];
 };

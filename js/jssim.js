@@ -432,6 +432,7 @@ var jssim = jssim || {};
     var Space2D = function () {
         this.locations = [];
         this.endlocations = [];
+        this.zoneControllers = [];
         this.agents = [];
         this.width = 100;
         this.height = 100;
@@ -542,7 +543,7 @@ var jssim = jssim || {};
             var y1 = line.y1;
             var x2 = line.x2;
             var y2 = line.y2;
-            console.log(x1 + ', ' + y1 + ' == ' + x0 + y0);
+            //console.log(x1 + ', ' + y1 + ' == ' + x0 + y0);
             x0 = x2;
             y0 = y2;
             context.moveTo(x1 * this.cellWidth, canvas.height - y1 * this.cellHeight);
