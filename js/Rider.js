@@ -10,7 +10,6 @@ var Rider = function(id, city, startx, starty, endx, endy){
  	this.inTransit = false;
  	this.carAssignment = null;
  	this.selectedToDropOff = false;
- 	this.priorZoneId = '';
 }
 Rider.prototype = Object.create(jssim.SimEvent.prototype);
 
@@ -29,14 +28,13 @@ Rider.prototype.designateAsDroppingOffNext = function() {
 	this.selectedToDropOff = true;
 }
 
-Rider.prototype.hopOffAtTransferPoint = function(tp, priorZoneId) {
+Rider.prototype.hopOffAtTransferPoint = function(tp) {
 	var rider_location = this.city.getLocation(this.id);
 	rider_location.x = tp.x;
 	rider_location.y = tp.y;
 	this.x = tp.x;
 	this.y = tp.y;
 	this.carAssignment = null;
-	this.priorZoneId = priorZoneId;
 	tp.receiveInboundRider(this);
 }
 

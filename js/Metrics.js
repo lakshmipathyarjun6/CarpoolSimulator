@@ -4,6 +4,7 @@ var Metrics = function(id, city, nc) {
 	this.city = city;
 	this.num_cars = nc;
 	this.avgRiders = 0.0;
+	this.completedTrips = 0;
 }
 Metrics.prototype = Object.create(jssim.SimEvent.prototype);
 
@@ -15,4 +16,8 @@ Metrics.prototype.update = function(deltaTime) {
 		totalPassengers += car.numPassengers;
 	}
 	this.avgRiders = totalPassengers / num_cars;
+};
+
+Metrics.prototype.addCompletedTrip = function() {
+	this.completedTrips++;
 };
