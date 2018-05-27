@@ -7,6 +7,7 @@ var Rider = function(id, city, startx, starty, endx, endy){
 	this.y = starty;
    	this.endx = endx;
 	this.endy = endy;
+	this.tripStart = null;
  	this.inTransit = false;
  	this.carAssignment = null;
  	this.selectedToDropOff = false;

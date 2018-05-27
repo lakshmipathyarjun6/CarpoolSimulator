@@ -21,3 +21,5 @@ var carSpeed = 0.2;
 var rider_probability = 80;
 city.width = 1180;
 city.height = 980;
+var flat_rate = 2;
+var per_unit_distance_rate = 0.05;

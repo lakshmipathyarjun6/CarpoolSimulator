@@ -287,6 +287,82 @@
       setInterval(maybeSpawnRidersRandom, 1000);
 
       var canvas = document.getElementById("myCanvas");
+      var farePlot = document.getElementById("farePlot");
+      var completedTripsPlot = document.getElementById("completedTripsPlot");
+      var collectedFaresPlot = document.getElementById("collectedFaresPlot");
+      var times = [];
+      var fares = [];
+      var completedTrips = [];
+
+      var carIndices = [];
+      for(var i = 1; i < num_cars+1; i++) {
+        carIndices.push(i);
+      }
+      var collectedFares = [];
+
+      /*var layoutFares = {
+          xaxis: {
+              title: 'Time',
+              showgrid: false,
+              zeroline: false
+          },
+          yaxis: {
+            title: 'Average Fare Collected',
+            showline: false
+          },
+          margin: { 
+              t: 0 
+          }
+      };
+      Plotly.newPlot( farePlot, [{
+          x: times,
+          y: fares }], layoutFares );*/
+
+      var layoutCompletedTrips = {
+          xaxis: {
+              title: 'Time',
+              showgrid: false,
+              zeroline: false
+          },
+          yaxis: {
+            title: 'Completed Trips',
+            showline: false
+          },
+          margin: { 
+              t: 0 
+          }
+      };
+      Plotly.newPlot( completedTripsPlot, [{
+          x: times,
+          y: completedTrips }], layoutCompletedTrips );
+
+
+      var data = [{
+          x: carIndices,
+          y: collectedFares,
+          type: 'bar'
+      }];
+
+      var layoutCollectedFares = {
+          xaxis: {
+              title: 'Cars',
+              showgrid: false,
+              zeroline: false
+          },
+          yaxis: {
+            title: 'Collected Fare',
+            showline: false
+          },
+          margin: { 
+              t: 0 
+          }
+      };
+      Plotly.newPlot(collectedFaresPlot, [{
+          x: carIndices,
+          y: collectedFares,
+          type: 'bar'
+      }], layoutCollectedFares);
+
       setInterval(
           function() { 
               scheduler.update();  
@@ -295,6 +371,32 @@
               var metrics = city.getAgent('m');
               document.getElementById("avgRiders").value = metrics.avgRiders;
               document.getElementById("completedTrips").value = metrics.completedTrips;
+              document.getElementById("avgCollectedFare").value = metrics.avgCollectedFare;
+
+              times.push(scheduler.current_time);
+              fares.push(metrics.avgCollectedFare);
+              completedTrips.push(metrics.completedTrips);
+              collectedFares = metrics.collectedFares;
+
+              var farePlotUpdate = {
+                  x: times,
+                  y: fares
+              };
+
+              var tripPlotUpdate = {
+                  x: times,
+                  y: completedTrips
+              };
+
+              var allfairsPlotUpdate = [{
+                  x: carIndices,
+                  y: collectedFares,
+                  type: 'bar'
+              }];
+              
+              //Plotly.relayout(farePlot, farePlotUpdate);
+              Plotly.relayout(completedTripsPlot, tripPlotUpdate);
+              Plotly.newPlot(collectedFaresPlot, allfairsPlotUpdate, layoutCollectedFares);
           }, 
           500
       );

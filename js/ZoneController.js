@@ -137,7 +137,7 @@ ZoneController.prototype.getRiderAssignment = function(car) {
 			}
 			else {
 				riderInDirection = true;
-			}
+			}		
 
 			if(this.pointInZone(rider.x, rider.y) && !rider.inTransit && !this.isRiderAssigned(rider) && riderInDirection) {
 				this.assign(rider, car);

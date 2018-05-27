@@ -15,6 +15,7 @@ var Car = function(id, city, x, y){
 	this.riderProfiles = [];
 	this.arrivedAtDestination = false;
 	this.currentRandomTarget = null;
+	this.earnings = 0;
 }
 Car.prototype = Object.create(jssim.SimEvent.prototype);
 
@@ -46,6 +47,10 @@ Car.prototype.moveTowards = function(targetVector) {
 		this.arrivedAtDestination = true;
 	}
 };
+
+Car.prototype.collectFare = function(amount) {
+	this.earnings += amount;
+}
 
 Car.prototype.selectNearestDropoffLocation = function() {
 	var car_location = this.city.getLocation(this.id);
@@ -217,6 +222,7 @@ Car.prototype.pickUpRider = function(rider) {
 	this.numPassengers++;
 	rider.carAssignment = this.id;
 	rider.inTransit = true;
+	rider.tripStart = new jssim.Vector2D(rider.x, rider.y);
 	this.riderProfiles.push(rider);
 	this.arrivedAtDestination = false;
 	this.zoneController.remove(rider, this);
@@ -272,6 +278,9 @@ Car.prototype.dropOffRidersAtDestination = function(destination) {
 			}
 			this.zoneController.removeRider(rider);
 			this.numPassengers--;
+			var trip_start = rider.tripStart;
+			var journey = new jssim.Vector2D(this.x - trip_start.x, this.y - trip_start.y);
+			this.collectFare(journey.length()*per_unit_distance_rate);
 		}
 		else {
 			newCurrentRidersList.push(rider);
@@ -314,6 +323,7 @@ Car.prototype.update = function(deltaTime) {
 		else {
 			this.arrivedAtDestination = false;
 			this.current_task = this.pickUpRider;
+			this.collectFare(flat_rate);
 			arg = next_rider;
 		}
 	}
