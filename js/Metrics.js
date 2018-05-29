@@ -6,7 +6,9 @@ var Metrics = function(id, city, nc) {
 	this.avgRiders = 0.0;
 	this.completedTrips = 0;
 	this.avgCollectedFare = 0;
+	this.averageTotalWaitTime = 0;
 	this.collectedFares = [];
+	this.riderWaitTimes = [];
 }
 Metrics.prototype = Object.create(jssim.SimEvent.prototype);
 
@@ -23,8 +25,19 @@ Metrics.prototype.update = function(deltaTime) {
 	}
 	this.avgRiders = totalPassengers / num_cars;
 	this.avgCollectedFare = totalFare / num_cars;
+	if(this.riderWaitTimes.length > 0) {
+		var grandTotal = 0;
+		for(time of this.riderWaitTimes) {
+			grandTotal += time;
+		}
+		this.averageTotalWaitTime = grandTotal / this.completedTrips;
+	}
 };
 
 Metrics.prototype.addCompletedTrip = function() {
 	this.completedTrips++;
+};
+
+Metrics.prototype.addTotalWaitTime = function(waitTime) {
+	this.riderWaitTimes.push(waitTime);
 };

@@ -11,6 +11,7 @@ var Rider = function(id, city, startx, starty, endx, endy){
  	this.inTransit = false;
  	this.carAssignment = null;
  	this.selectedToDropOff = false;
+ 	this.waitTime = 0;
 }
 Rider.prototype = Object.create(jssim.SimEvent.prototype);
 
@@ -22,6 +23,9 @@ Rider.prototype.update = function(deltaTime) {
 		rider_location.y = car_location.y;
 		this.x = car_location.x;
 		this.y = car_location.y;
+	}
+	else {
+		this.waitTime++;
 	}
 };
 
@@ -40,5 +44,7 @@ Rider.prototype.hopOffAtTransferPoint = function(tp) {
 }
 
 Rider.prototype.destroy = function() {
+	var metrics = this.city.getAgent('m');
+	metrics.addTotalWaitTime(this.waitTime);
 	delete this.city.deleteAgent(this);
 }
